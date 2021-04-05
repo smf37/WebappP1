@@ -8,4 +8,8 @@ This project is a homework assignment to teach how to get Pycharm setup with Doc
 # Postman Data Query
 ![postman data query](screenshots/postman.png)
 
+# HTML Query Screenshot
+![HTML Query Data](screenshots/HTML_query.png)
+
+
 
