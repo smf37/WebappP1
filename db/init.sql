@@ -1,15 +1,15 @@
-CREATE DATABASE oscar_age_male;
-use oscar_age_male;
+CREATE DATABASE oscarData;
+use oscarData;
 
 CREATE TABLE IF NOT EXISTS oscar_age_male (
-    `Index` INT,
-    `Year` INT,
-    `Age` INT,
-    `Name` VARCHAR(25) CHARACTER SET utf8,
-    `Movie` VARCHAR(34) CHARACTER SET utf8,
-    `Column_6` VARCHAR(22) CHARACTER SET utf8
+    `fldIndex` INT,
+    `fldYear` INT,
+    `fldAge` INT,
+    `fldName` VARCHAR(25) CHARACTER SET utf8,
+    `fldMovie` VARCHAR(34) CHARACTER SET utf8,
+    `fldColumn_6` VARCHAR(22) CHARACTER SET utf8
 );
-INSERT INTO oscar_age_male VALUES
+INSERT INTO oscar_age_male (fldIndex, fldYear, fldAge, fldName, fldMovie, fldColumn_6) VALUES
     ( 1, 1928, 44,' "Emil Jannings"',' "The Last Command',' The Way of All Flesh"'),
     ( 2, 1929, 41,' "Warner Baxter"',' "In Old Arizona"',NULL),
     ( 3, 1930, 62,' "George Arliss"',' "Disraeli"',NULL),
