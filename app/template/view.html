@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card" class="m-5 p-2">
+    <h5 class="card-title">{{ oscar.fldName }} - {{ oscar.fldIndex }}</h5>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ oscar.fldIndex }}</li>
+        <li class="list-group-item">{{ oscar.fldYear }}</li>
+        <li class="list-group-item">{{ oscar.fldAge }}</li>
+        <li class="list-group-item">{{ oscar.fldName }}</li>
+        <li class="list-group-item">{{ oscar.fldMovie }}</li>
+        <li class="list-group-item">{{ oscar.fldColumn_6 }}</li>
+    </ul>
+    <div class="card-body">
+        <a href="/edit/{{oscar.id}}" class="card-link btn btn-primary">edit</a>
+    </div>
+</div>
+<form action="/delete/{{oscar.id}}" method="post"><button type="submit" class="btn btn-danger">Delete</button></form>
+
+
+{% endblock %}
