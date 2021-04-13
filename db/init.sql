@@ -2,12 +2,14 @@ CREATE DATABASE oscarData;
 use oscarData;
 
 CREATE TABLE IF NOT EXISTS oscar_age_male (
+    `id` int AUTO_INCREMENT,
     `fldIndex` INT,
     `fldYear` INT,
     `fldAge` INT,
     `fldName` VARCHAR(25) CHARACTER SET utf8,
     `fldMovie` VARCHAR(34) CHARACTER SET utf8,
-    `fldColumn_6` VARCHAR(22) CHARACTER SET utf8
+    `fldColumn_6` VARCHAR(22) CHARACTER SET utf8,
+    PRIMARY KEY (`id`)
 );
 INSERT INTO oscar_age_male (fldIndex, fldYear, fldAge, fldName, fldMovie, fldColumn_6) VALUES
     ( 1, 1928, 44,' "Emil Jannings"',' "The Last Command',' The Way of All Flesh"'),
