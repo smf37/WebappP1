@@ -2,15 +2,15 @@
 {% block content %}
 
 <div class="card" class="m-5 p-2">
-    <h5 class="card-title">{{ oscar.fldIndex }} - {{ oscar.fldName }}</h5>
+    <h5 class="card-title">{{ oscar.fldIndex }} - {{ oscar.fldMovie }}</h5>
 
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{ oscar.fldIndex }}</li>
-        <li class="list-group-item">{{ oscar.fldYear }}</li>
-        <li class="list-group-item">{{ oscar.fldAge }}</li>
-        <li class="list-group-item">{{ oscar.fldName }}</li>
-        <li class="list-group-item">{{ oscar.fldMovie }}</li>
-        <li class="list-group-item">{{ oscar.fldColumn_6 }}</li>
+        <li class="list-group-item">Index: {{ oscar.fldIndex }}</li>
+        <li class="list-group-item">Year: {{ oscar.fldYear }}</li>
+        <li class="list-group-item">Age: {{ oscar.fldAge }}</li>
+        <li class="list-group-item">Name: {{ oscar.fldName }}</li>
+        <li class="list-group-item">Movie: {{ oscar.fldMovie }}</li>
+        <li class="list-group-item">Column_6: {{ oscar.fldColumn_6 }}</li>
     </ul>
     <div class="card-body">
         <a href="/edit/{{oscar.id}}" class="card-link btn btn-primary">edit</a>
