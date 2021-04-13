@@ -3,7 +3,7 @@ import simplejson as json
 from flask import Flask, request, Response, redirect
 from flask import render_template
 from flaskext.mysql import MySQL
-from mysql.cursors import DictCursor
+from pymysql.cursors import DictCursor
 
 app = Flask(__name__)
 mysql = MySQL(cursorclass=DictCursor)
@@ -22,7 +22,7 @@ def index():
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM oscar_age_male')
     result = cursor.fetchall()
-    return render_template('index.html', title='Home', user=user, cities=result)
+    return render_template('index.html', title='Home', user=user, oscars=result)
 
 
 @app.route('/view/<int:oscar_id>', methods=['GET'])
@@ -30,54 +30,54 @@ def record_view(oscar_id):
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM oscar_age_male WHERE id=%s', oscar_id)
     result = cursor.fetchall()
-    return render_template('view.html', title='View Form', city=result[0])
+    return render_template('view.html', title='View Form', oscar=result[0])
 
-@app.route('/edit/<int:city_id>', methods=['GET'])
-def form_edit_get(city_id):
+@app.route('/edit/<int:oscar_id>', methods=['GET'])
+def form_edit_get(oscar_id):
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM oscar_age_male WHERE id=%s', city_id)
+    cursor.execute('SELECT * FROM oscar_age_male WHERE id=%s', oscar_id)
     result = cursor.fetchall()
-    return render_template('edit.html', title='Edit Form', city=result[0])
+    return render_template('edit.html', title='Edit Form', oscar=result[0])
 
 
-@app.route('/edit/<int:city_id>', methods=['POST'])
-def form_update_post(city_id):
+@app.route('/edit/<int:oscar_id>', methods=['POST'])
+def form_update_post(oscar_id):
     cursor = mysql.get_db().cursor()
-    inputData = (request.form.get('fldName'), request.form.get('fldLat'), request.form.get('fldLong'),
-                 request.form.get('fldCountry'), request.form.get('fldAbbreviation'),
-                 request.form.get('fldCapitalStatus'), request.form.get('fldPopulation'), city_id)
-    sql_update_query = """UPDATE oscar_age_male t SET t.fldName = %s, t.fldLat = %s, t.fldLong = %s, t.fldCountry = 
-    %s, t.fldAbbreviation = %s, t.fldCapitalStatus = %s, t.fldPopulation = %s WHERE t.id = %s """
+    inputData = (request.form.get('fldIndex'), request.form.get('fldYear'), request.form.get('fldAge'),
+                 request.form.get('fldName'), request.form.get('fldMovie'),
+                 request.form.get('fldColumn_6'), oscar_id)
+    sql_update_query = """UPDATE oscar_age_male t SET t.fldIndex = %s, t.fldYear = %s, t.fldAge = %s, t.fldName = 
+    %s, t.fldMovie = %s, t.fldColumn_6 = %s WHERE t.id = %s """
     cursor.execute(sql_update_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
 
-@app.route('/cities/new', methods=['GET'])
+@app.route('/oscars/new', methods=['GET'])
 def form_insert_get():
     return render_template('new.html', title='New City Form')
 
 
-@app.route('/cities/new', methods=['POST'])
+@app.route('/oscars/new', methods=['POST'])
 def form_insert_post():
     cursor = mysql.get_db().cursor()
-    inputData = (request.form.get('fldName'), request.form.get('fldLat'), request.form.get('fldLong'),
-                 request.form.get('fldCountry'), request.form.get('fldAbbreviation'),
-                 request.form.get('fldCapitalStatus'), request.form.get('fldPopulation'))
-    sql_insert_query = """INSERT INTO oscar_age_male (fldName,fldLat,fldLong,fldCountry,fldAbbreviation,fldCapitalStatus,fldPopulation) VALUES (%s, %s,%s, %s,%s, %s,%s) """
+    inputData = (request.form.get('fldIndex'), request.form.get('fldYear'), request.form.get('fldAge'),
+                 request.form.get('fldName'), request.form.get('fldMovie'),
+                 request.form.get('fldColumn_6'))
+    sql_insert_query = """INSERT INTO oscar_age_male (fldIndex,fldYear,fldAge,fldName,fldMovie,fldColumn_6) VALUES (%s, %s,%s, %s,%s, %s) """
     cursor.execute(sql_insert_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
 
-@app.route('/delete/<int:city_id>', methods=['POST'])
-def form_delete_post(city_id):
+@app.route('/delete/<int:oscar_id>', methods=['POST'])
+def form_delete_post(oscar_id):
     cursor = mysql.get_db().cursor()
     sql_delete_query = """DELETE FROM oscar_age_male WHERE id = %s """
-    cursor.execute(sql_delete_query, city_id)
+    cursor.execute(sql_delete_query, oscar_id)
     mysql.get_db().commit()
     return redirect("/", code=302)
 
 
-@app.route('/api/v1/cities', methods=['GET'])
+@app.route('/api/v1/oscars', methods=['GET'])
 def api_browse() -> str:
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM oscar_age_male')
@@ -87,30 +87,30 @@ def api_browse() -> str:
     return resp
 
 
-@app.route('/api/v1/cities/<int:city_id>', methods=['GET'])
-def api_retrieve(city_id) -> str:
+@app.route('/api/v1/oscars/<int:oscar_id>', methods=['GET'])
+def api_retrieve(oscar_id) -> str:
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM oscar_age_male WHERE id=%s', city_id)
+    cursor.execute('SELECT * FROM oscar_age_male WHERE id=%s', oscar_id)
     result = cursor.fetchall()
     json_result = json.dumps(result)
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
 
-@app.route('/api/v1/cities/', methods=['POST'])
+@app.route('/api/v1/oscars/', methods=['POST'])
 def api_add() -> str:
     resp = Response(status=201, mimetype='application/json')
     return resp
 
 
-@app.route('/api/v1/cities/<int:city_id>', methods=['PUT'])
-def api_edit(city_id) -> str:
+@app.route('/api/v1/oscars/<int:oscar_id>', methods=['PUT'])
+def api_edit(oscar_id) -> str:
     resp = Response(status=201, mimetype='application/json')
     return resp
 
 
-@app.route('/api/cities/<int:city_id>', methods=['DELETE'])
-def api_delete(city_id) -> str:
+@app.route('/api/oscars/<int:oscar_id>', methods=['DELETE'])
+def api_delete(oscar_id) -> str:
     resp = Response(status=210, mimetype='application/json')
     return resp
 
