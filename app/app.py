@@ -97,23 +97,45 @@ def api_retrieve(oscar_id) -> str:
     return resp
 
 
-@app.route('/api/v1/oscars/', methods=['POST'])
+@app.route('/api/v1/oscars', methods=['POST'])
 def api_add() -> str:
+
+    content = request.json
+
+    cursor = mysql.get_db().cursor()
+    inputData = (content['fldIndex'], content['fldYear'], content['fldAge'],
+                 content['fldName'], content['fldMovie'],
+                 content['fldColumn_6'])
+    sql_insert_query = """INSERT INTO oscar_age_male (fldIndex,fldYear,fldAge,fldName,fldMovie,fldColumn_6) VALUES (%s, %s,%s, %s,%s, %s) """
+    cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
     resp = Response(status=201, mimetype='application/json')
     return resp
 
 
 @app.route('/api/v1/oscars/<int:oscar_id>', methods=['PUT'])
 def api_edit(oscar_id) -> str:
-    resp = Response(status=201, mimetype='application/json')
+    cursor = mysql.get_db().cursor()
+    content = request.json
+    inputData = (content['fldIndex'], content['fldYear'], content['fldAge'],
+                 content['fldName'], content['fldMovie'],
+                 content['fldColumn_6'],oscar_id)
+    sql_update_query = """UPDATE oscar_age_male t SET t.fldIndex = %s, t.fldYear = %s, t.fldAge = %s, t.fldName = 
+        %s, t.fldMovie = %s, t.fldColumn_6 = %s WHERE t.id = %s """
+    cursor.execute(sql_update_query, inputData)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
     return resp
 
 
-@app.route('/api/oscars/<int:oscar_id>', methods=['DELETE'])
+@app.route('/api/v1/oscars/<int:oscar_id>', methods=['DELETE'])
 def api_delete(oscar_id) -> str:
-    resp = Response(status=210, mimetype='application/json')
+    cursor = mysql.get_db().cursor()
+    sql_delete_query = """DELETE FROM oscar_age_male WHERE id = %s """
+    cursor.execute(sql_delete_query, oscar_id)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
     return resp
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
